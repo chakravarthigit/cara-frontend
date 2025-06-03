@@ -1,9 +1,9 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:18' // Official Node.js image with npm and yarn
-      args '-u root'  // Allows installing global packages
-    }
+  agent any
+
+  environment {
+    // Optional: adjust PATH if node/yarn are in custom directories
+    PATH = "/usr/local/bin:/usr/bin:$PATH"
   }
 
   stages {
@@ -13,10 +13,14 @@ pipeline {
       }
     }
 
-    stage('Install Yarn & Dependencies') {
+    stage('Install Dependencies') {
       steps {
-        sh 'npm install -g yarn'
-        sh 'yarn install'
+        sh '''
+          node -v || curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          node -v || sudo apt-get install -y nodejs
+          yarn -v || sudo npm install -g yarn
+          yarn install
+        '''
       }
     }
 
@@ -30,7 +34,7 @@ pipeline {
 
     stage('Archive APK') {
       steps {
-        archiveArtifacts artifacts: '**/*.apk', fingerprint: true
+        archiveArtifacts artifacts: 'android/app/build/outputs/**/*.apk', fingerprint: true
       }
     }
   }
