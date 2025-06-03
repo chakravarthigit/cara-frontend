@@ -1,18 +1,18 @@
 pipeline {
   agent any
 
-  stage('Checkout') {
-  steps {
-    git branch: 'main', url: 'https://github.com/chakravarthigit/cara-frontend.git'
-  }
-}
-
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'main', url: 'https://github.com/chakravarthigit/cara-frontend.git'
+      }
+    }
     stage('Install Dependencies') {
       steps {
         sh 'yarn install'
       }
     }
-    // Test stage removed as requested
+    // test stage removed
     stage('Build Android') {
       steps {
         dir('android') {
@@ -24,6 +24,7 @@ pipeline {
       steps {
         archiveArtifacts artifacts: '**/*.apk', fingerprint: true
       }
-    }
-  }
-}
+    }  // <-- Make sure no extra closing brace here
+  }  // end stages
+
+} // end pipeline
