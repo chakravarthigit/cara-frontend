@@ -2,13 +2,18 @@ pipeline {
   agent any
 
   tools {
-    nodejs 'Node 18'  // Make sure this matches your NodeJS installation name in Jenkins Global Tool Configuration
+    nodejs 'Node 18'  // your NodeJS installation name in Jenkins
   }
 
   stages {
     stage('Checkout') {
       steps {
         git branch: 'main', url: 'https://github.com/chakravarthigit/cara-frontend.git'
+      }
+    }
+    stage('Setup Yarn') {
+      steps {
+        sh 'npm install -g yarn'
       }
     }
     stage('Install Dependencies') {
