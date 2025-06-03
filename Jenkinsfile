@@ -2,7 +2,12 @@ pipeline {
   agent any
 
   tools {
-    nodejs 'Node 18'  // 👈 Must match exactly what is in Jenkins global config
+    nodejs 'Node 18'
+  }
+
+  environment {
+    ANDROID_HOME = '/opt/android-sdk'  // Change to your SDK location
+    PATH = "${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
   }
 
   stages {
