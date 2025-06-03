@@ -1,12 +1,12 @@
 pipeline {
   agent any
 
-  stages {
-    stage('Checkout') {
-      steps {
-        git 'https://github.com/chakravarthigit/cara-frontend.git'
-      }
-    }
+  stage('Checkout') {
+  steps {
+    git branch: 'main', url: 'https://github.com/chakravarthigit/cara-frontend.git'
+  }
+}
+
     stage('Install Dependencies') {
       steps {
         sh 'yarn install'
