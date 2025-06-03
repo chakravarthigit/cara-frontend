@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'Node 18'  // Name must match Jenkins NodeJS installation config
+  }
+
   environment {
     ANDROID_HOME = '/opt/android-sdk'
     PATH = "${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
@@ -15,6 +19,9 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
+        // Use the 'node' and 'yarn' binaries installed by NodeJS plugin
+        sh 'node -v'
+        sh 'npm install -g yarn'    // Install yarn globally in pipeline (if not pre-installed)
         sh 'yarn install'
       }
     }
