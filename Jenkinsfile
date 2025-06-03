@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'node:18' // Official Node.js image with npm and yarn
+      args '-u root'  // Allows installing global packages
+    }
+  }
 
   stages {
     stage('Checkout') {
