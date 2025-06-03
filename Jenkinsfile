@@ -7,12 +7,14 @@ pipeline {
         git branch: 'main', url: 'https://github.com/chakravarthigit/cara-frontend.git'
       }
     }
-    stage('Install Dependencies') {
+
+    stage('Install Yarn & Dependencies') {
       steps {
+        sh 'npm install -g yarn'
         sh 'yarn install'
       }
     }
-    // test stage removed
+
     stage('Build Android') {
       steps {
         dir('android') {
@@ -20,11 +22,11 @@ pipeline {
         }
       }
     }
+
     stage('Archive APK') {
       steps {
         archiveArtifacts artifacts: '**/*.apk', fingerprint: true
       }
-    }  // <-- Make sure no extra closing brace here
-  }  // end stages
-
-} // end pipeline
+    }
+  }
+}
