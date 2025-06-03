@@ -1,9 +1,8 @@
 pipeline {
   agent any
 
-  environment {
-    // Optional: adjust PATH if node/yarn are in custom directories
-    PATH = "/usr/local/bin:/usr/bin:$PATH"
+  tools {
+    nodejs 'Node18'  // This matches the name you configured
   }
 
   stages {
@@ -16,9 +15,7 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         sh '''
-          node -v || curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-          node -v || sudo apt-get install -y nodejs
-          yarn -v || sudo npm install -g yarn
+          yarn -v || npm install -g yarn
           yarn install
         '''
       }
