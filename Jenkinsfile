@@ -2,26 +2,32 @@ pipeline {
   agent any
 
   tools {
-    nodejs 'Node 18'
+    nodejs 'Node 18'  // Make sure this tool is installed and named exactly "Node 18" in Jenkins
   }
 
   environment {
-    ANDROID_HOME = '/opt/android-sdk'  // Change to your SDK location
+    ANDROID_HOME = '/opt/android-sdk'  // Change this to your actual SDK path
     PATH = "${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${env.PATH}"
   }
 
   stages {
     stage('Checkout') {
       steps {
+        // Checkout explicitly main branch
         git branch: 'main', url: 'https://github.com/chakravarthigit/cara-frontend.git'
       }
     }
 
     stage('Install Dependencies') {
       steps {
+        sh 'yarn install'
+      }
+    }
+
+    stage('Configure Android SDK') {
+      steps {
         sh '''
-          yarn -v || npm install -g yarn
-          yarn install
+          echo "sdk.dir=${ANDROID_HOME}" > android/local.properties
         '''
       }
     }
@@ -36,7 +42,7 @@ pipeline {
 
     stage('Archive APK') {
       steps {
-        archiveArtifacts artifacts: 'android/app/build/outputs/**/*.apk', fingerprint: true
+        archiveArtifacts artifacts: 'android/app/build/outputs/apk/release/app-release.apk', fingerprint: true
       }
     }
   }
